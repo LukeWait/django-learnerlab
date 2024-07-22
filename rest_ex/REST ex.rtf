@@ -1,0 +1,106 @@
+Dear students,
+
+ 
+
+I m excited to announce the availability of our Django REST demo for you to run on your Windows machines. This demo has been developed on a Mac machine and is now ready for you to try out and explore. The demo showcases the use of Django REST framework, which is a powerful toolkit for building  restfulAPIs.
+
+ 
+
+To run the demo on your Windows machine, you will need to follow the steps provided below:
+
+ 
+
+Install Python 3.x on your Windows machine if you don't already have it installed. You can download it from the official website: https://www.python.org/downloads/windows/.
+
+ 
+
+Install pip, the Python package installer, using the following command in the command prompt: python -m ensurepip --default-pip
+
+ 
+
+*Clone the demo repository from Github using the following command in the command prompt: git clone https://github.com/your-repo-url.git
+
+ 
+
+Navigate to the project directory and install the required dependencies using the following command: pip install -r requirements.txt
+
+ 
+
+Run the Django development server using the following command: python manage.py runserver
+
+ 
+
+Open a Ib browser and navigate to http://localhost:8000/ to see the demo in action.
+
+ 
+
+Please note that the SuperUser's username is davidhunt and the password is Password! You will need to use these credentials to log in and access the admin panel.
+
+ 
+
+Open the terminal and navigate to the project directory.
+Activate the virtual environment by running the following command:
+bashCopy code
+
+source env/bin/activate
+
+Start the server by running the following command:
+Copy code
+
+python manage.py runserver
+
+Open your Ib browser and navigate to http://localhost:8000/admin/.
+Enter the superuser credentials to log in.
+Once logged in, you will see a list of available models. Click on the Todo model.
+Here you can add, update, or delete todos.
+To add a new todo, click on the ADD TODO button at the top right corner of the page. Enter the task details and click on SAVE.
+
+To update an existing todo, click on the todo you want to update from the list. Update the task details and click on SAVE.
+
+To delete a todo, click on the todo you want to delete from the list. Then click on DELETE SELECTED TODO. Confirm the deletion by clicking on OK.
+
+To access the CRUD functions through the REST API, open a new tab in your Ib browser and navigate to http://localhost:8000/api/todos/. This will display a list of todos for the current user.
+To create a new todo, click on the CREATE button at the top of the page. Enter the task details and click on SAVE.
+To update an existing todo, click on the todo you want to update from the list. Update the task details and click on SAVE.
+To delete a todo, click on the todo you want to delete from the list. Then click on DELETE. Confirm the deletion by clicking on OK.
+That's it! You now know how to use the CRUD functions through both the Django admin interface and the REST API.
+
+ 
+
+I hope that you find this demo useful and informative. If you have any questions or face any issues while running the demo, please don't hesitate to reach out to us for assistance.
+
+ 
+
+Best regards,
+
+David hunt
+
+ 
+
+ 
+
+ 
+
+Note: the port number is different becauseI'm using 8001, you should use 8000
+
+ 
+
+ This screen advertises the api endpoints. We not using the api_admin for this demo.
+
+ 
+
+ 
+
+ Notice this fires of the get functions from the views.py
+
+ 
+
+on the same screen add another to_do task
+
+ 
+
+So this should get you started on your journey ti apis in djangos.
+
+Soi I try to do a delete  ID 4
+
+I hope got it working.
