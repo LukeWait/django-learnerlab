@@ -3,8 +3,8 @@
 Enha
 
 ### Pictures
-<p align="left">
-  <img src="" alt="Labs screenshot" width="700">
+<p align="center">
+  <img src="https://github.com/LukeWait/django-learnerlab/raw/main/docs/screenshots/django-learnerlab-titlepage.png" alt="Labs Screenshot" width="700">
 </p>
 
 ## Table of Contents
