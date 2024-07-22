@@ -2,7 +2,6 @@
 ## Description
 Enha
 
-### Pictures
 <p align="center">
   <img src="https://github.com/LukeWait/django-learnerlab/raw/main/docs/screenshots/django-learnerlab-titlepage.png" alt="Labs Screenshot" width="700">
 </p>
