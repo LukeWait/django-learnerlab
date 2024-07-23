@@ -1,6 +1,6 @@
 # Django Learner Lab
 ## Description
-Enha
+* Work In Progress * - A tutorial for Django beginners to get a project up and running. Aids in understanding the fundamentals of web framework and how they interact with databases and APIs.
 
 <p align="center">
   <img src="https://github.com/LukeWait/django-learnerlab/raw/main/docs/screenshots/django-learnerlab-titlepage.png" alt="Labs Screenshot" width="700">
