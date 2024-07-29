@@ -2,9 +2,33 @@
 ## Description
 * Work In Progress * - A tutorial for Django beginners to get a project up and running. Aids in understanding the fundamentals of web framework and how they interact with databases and APIs.
 
+2 documents:
+- Django Learner Lab Part 1 - Fundamentals of web development frameworks and associated tools
+  - web dev frameworks, mvcs, and the requirements of modern web dev design
+  - front/back end options and how they fit in with framework/mvc
+  - use of IDE and git for modern development
+  - Django project contents, use of vm, servers, containers, and ci/cd pipelines for deployment
+  - apis, endpoints, and the need for testing and documentation
+  - intro the Part 2 practical activities and additional learning resources
+- Django Learner Lab Part 2 - Getting started with remote access, backend data modeling, and API endpoints
+  - setting up a virtual machine to host django projects and allow remote access
+  - cloning repo to vm and setting up the environments via IDE on host machine
+  - exploring the sql_ex django project to understand framework structure and ORM functionality
+  - exploring the nosql_ex django project, including connecting to external db and creating/testing api endpoints
+  - generating api documentation with swagger
+  - starting a new project, command cheat sheets, and further learning avenues
+
 <p align="center">
   <img src="https://github.com/LukeWait/django-learnerlab/raw/main/docs/screenshots/django-learnerlab-titlepage.png" alt="Labs Screenshot" width="700">
 </p>
+
+2 Django Projects:
+These will facilitate the means to complete the practical labs outlined in Django Learner Lab Part 2.
+- sql_ex
+  - provides a platform to discover benefits of ORM and use of relational dbs with Django
+- nosql_ex
+  - highlights connections to external dbs
+  - focuses on implementing api endpoints which are required for db queries
 
 ## Table of Contents
 - [Installation](#installation)
