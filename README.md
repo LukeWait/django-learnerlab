@@ -2,7 +2,12 @@
 ## Description
 * Work In Progress * - A tutorial for Django beginners to get a project up and running. Aids in understanding the fundamentals of web framework and how they interact with databases and APIs.
 
-2 documents:
+<p align="center">
+  <img src="https://github.com/LukeWait/django-learnerlab/raw/main/docs/screenshots/django-learnerlab-titlepage.png" alt="Labs Screenshot" width="700">
+</p>
+
+### Features
+2 Written Documents:
 - Django Learner Lab Part 1 - Fundamentals of web development frameworks and associated tools
   - web dev frameworks, mvcs, and the requirements of modern web dev design
   - front/back end options and how they fit in with framework/mvc
@@ -17,10 +22,6 @@
   - exploring the nosql_ex django project, including connecting to external db and creating/testing api endpoints
   - generating api documentation with swagger
   - starting a new project, command cheat sheets, and further learning avenues
-
-<p align="center">
-  <img src="https://github.com/LukeWait/django-learnerlab/raw/main/docs/screenshots/django-learnerlab-titlepage.png" alt="Labs Screenshot" width="700">
-</p>
 
 2 Django Projects:
 These will facilitate the means to complete the practical labs outlined in Django Learner Lab Part 2.
