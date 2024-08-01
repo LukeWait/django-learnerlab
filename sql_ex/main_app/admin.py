@@ -1,9 +1,9 @@
 from django.contrib import admin
-from .models import Venue
-from .models import ClubMember
-from .models import Event
+from .models import RecordLabel
+from .models import Musician
+from .models import Album
 
 # Register your models here.
-admin.site.register(Venue)
-admin.site.register(ClubMember)
-admin.site.register(Event)
+admin.site.register(RecordLabel)
+admin.site.register(Musician)
+admin.site.register(Album)
