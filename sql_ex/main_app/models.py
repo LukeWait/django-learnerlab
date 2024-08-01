@@ -1,5 +1,6 @@
 from django.db import models
 
+# Create your models here.
 class RecordLabel(models.Model):
     name = models.CharField('Label Name', max_length=100)
     address = models.CharField('Address', max_length=300)
