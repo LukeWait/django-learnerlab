@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # Declare the rest_framework toolkit to enable functionality
+    'rest_framework',
     # List project apps here.
     'main_app',
 ]

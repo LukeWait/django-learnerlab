@@ -1,6 +1,4 @@
-#!/bin/sh
-'''exec' "/Users/davidhunt/Desktop/Django Rest Api/myapienv/bin/python3" "$0" "$@"
-' '''
+#!/home/lukewait/git/django-learnerlab/rest_ex/rest_ex_venv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys

@@ -20,6 +20,6 @@ from todo_api import urls as todo_urls #add this line
 urlpatterns = [
     path('admin/', admin.site.urls),
  #include rest_framework and URLs as shown below in your main urls.py file:   
-    path('api_auth/', include('rest_framework.urls')),
+    path('api-auth/', include('rest_framework.urls')),
     path('todos/', include(todo_urls)), # add this path to your app
 ]
