@@ -1,5 +1,5 @@
 from django.urls import path
-from djangoapp.views import TheModelView
+from .views import TheModelView
 
 from . import views
 

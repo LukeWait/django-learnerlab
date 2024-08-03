@@ -9,9 +9,12 @@ class RecordLabelSerializer(serializers.ModelSerializer):
         fields = ["id", "name", "address", "email"]
 
 class MusicianSerializer(serializers.ModelSerializer):
+    # Enables output of agent.username instead of the default - agent.id
+    agent_username = serializers.CharField(source='agent.username', read_only=True)
+    
     class Meta:
         model = Musician
-        fields = ["id", "first_name", "last_name", "instrument"]
+        fields = ["id", "first_name", "last_name", "instrument", "agent_username"]
         
 class AlbumSerializer(serializers.ModelSerializer):
     class Meta:
