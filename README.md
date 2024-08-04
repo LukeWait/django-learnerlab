@@ -1,6 +1,11 @@
 # Django Learner Lab
 ## Description
-* Work In Progress * - A tutorial for Django beginners to get a project up and running. Aids in understanding the fundamentals of web framework and how they interact with databases and APIs.
+A tutorial for Django beginners to get a project up and running. Aids in understanding the fundamentals of web framework and how they interact with databases and APIs.
+
+**Work In Progress**
+**Update**
+- sql_ex project is completed with ORM, REST framework, front end view, API views/endpoints, and extensive commenting to explain the purpose of files, settings, methods, etc. I'll add the code to generate Swagger API documentation and it should be 100%.
+- I'll focus on completing the nosql_ex project next, before moving my attention to the tutorial documents which are still in a rough draft state while I figure out what to cover, and in what order.
 
 <p align="center">
   <img src="https://github.com/LukeWait/django-learnerlab/raw/main/docs/screenshots/django-learnerlab-titlepage.png" alt="Labs Screenshot" width="700">
