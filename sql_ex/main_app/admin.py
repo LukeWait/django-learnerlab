@@ -1,14 +1,17 @@
-""" admin.py
+"""admin.py
 
-This file configures the Django admin interface for your application. It is used to register 
-models (database tables) so they can be managed through the admin panel, enabling easy creation, 
-reading, updating, and deletion (CRUD) of data.
+This file configures the Django admin interface for your application. It registers models (database tables) with the admin panel, 
+allowing you to manage them easily. By registering your models, you enable the admin interface to provide functionality for 
+creating, reading, updating, and deleting (CRUD) data.
+
+When using Django's built-in User and Group models, these models are automatically available in the admin panel. 
+If you are using custom user or group models, you will need to register those as well to manage them through the admin interface.
 """
 
-# Import the admin module to register models for the Django admin interface.
+# Import the 'admin' module to register models for the Django admin interface.
 from django.contrib import admin
 
-# Import the models defined in the models.py file for this app (main_app).
+# Import the models defined in the 'models.py' file for this app (main_app).
 from .models import RecordLabel, Musician, Album
 
 # Register your models here to make them available in the Django admin interface.

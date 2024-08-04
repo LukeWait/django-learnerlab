@@ -3,13 +3,16 @@
 This file defines the database models for the Django app.
 Each model represents a table in the database, with fields corresponding to columns.
 Models establish the structure of the database and define relationships between different types of data.
+
+When using Django's default database (SQLite), there is no need to explicitly define the User and Group authentication models, 
+as Django manages them internally. However, if you choose to use an external database, you must declare the User and Group 
+models in this file to ensure they are properly mapped and managed within your application.
 """
 
-# Import models from Django's ORM to define the database schema and create database tables.
+# Import 'models' from Django's ORM to define the database schema and create database tables.
 from django.db import models
-
 # OPTIONAL: Import User from the Django auth model to associate data entries with specific users.
-# This enables user-based data management, allowing control over who can view or modify data in views.py and API views.
+# This enables additional user-based data management, allowing control over who can view or modify data in 'views.py'.
 from django.contrib.auth.models import User
 
 class RecordLabel(models.Model):
@@ -20,8 +23,7 @@ class RecordLabel(models.Model):
     email = models.EmailField('Contact Email')
     
     def __str__(self):
-        """Returns a string representation of the model,
-        typically used in the Django admin site
+        """Returns a string representation of the model, typically used in the Django admin site
         """
         return self.name
 
@@ -31,13 +33,12 @@ class Musician(models.Model):
     first_name = models.CharField('First Name', max_length=30)
     last_name = models.CharField('Last Name', max_length=30)
     instrument = models.CharField('Instrument', max_length=50)
-    # The agent field creates a ForeignKey relationship to the PrimaryKey (id) of the User model.
-    # This links each musician to the id of a specific user (agent) who manages them.
-    agent = models.ForeignKey(User, on_delete = models.CASCADE, blank = True, null = True)
+    # The agent field creates a ForeignKey relationship to the PrimaryKey ('id') of the imported 'User' model.
+    # This links each musician to the 'id' of a specific user ('agent') who manages them.
+    agent = models.ForeignKey(User, on_delete = models.CASCADE, blank = True)
     
     def __str__(self):
-        """Returns a string representation of the model,
-        typically used in the Django admin site
+        """Returns a string representation of the model, typically used in the Django admin site
         """
         return f"{self.first_name} {self.last_name} ({self.instrument})"
 
@@ -48,16 +49,15 @@ class Album(models.Model):
     artist = models.CharField('Artist', max_length=200)
     release_date = models.DateField('Release Date')
     genre = models.CharField('Genre', max_length=100)
-    # The label field creates a ForeignKey relationship to the PrimaryKey (id) of the RecordLabel model.
-    # This links each album to the id of a specific record label.
+    # The label field creates a ForeignKey relationship to the PrimaryKey ('id') of the 'RecordLabel' model.
+    # This links each album to the 'id' of a specific record label.
     label = models.ForeignKey(RecordLabel, on_delete=models.CASCADE, verbose_name='Record Label')
-    # The album_members field creates a ManyToManyField relationship to the Musician model.
+    # The album_members field creates a ManyToManyField relationship to the 'Musician' model.
     # This allows each album to have multiple musicians, and each musician to be part of multiple albums.
-    # Django automatically creates a linking table using the id fields from corresponding tables (Album and Musician).
+    # Django automatically creates a linking table using the 'id' fields from corresponding tables ('Album' and 'Musician').
     album_members = models.ManyToManyField(Musician, blank=True, verbose_name='Album Members')
 
     def __str__(self):
-        """Returns a string representation of the model,
-        typically used in the Django admin site
+        """Returns a string representation of the model, typically used in the Django admin site
         """
         return f"{self.artist}: {self.title}"

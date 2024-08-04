@@ -1,4 +1,6 @@
-"""URL configuration for config project.
+"""urls.py
+
+URL configuration for config project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/5.0/topics/http/urls/
@@ -14,13 +16,19 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
+# Import the 'admin' module to register path to the Django admin interface.
 from django.contrib import admin
-from django.urls import path, include # add include here
-from main_app import urls as main_app_urls #add this line
+# Import 'path' from Django's URL dispatcher to define URL patterns and map them to specific views.
+# Import the 'include' function to reference other URL configurations.
+from django.urls import path, include
 
 urlpatterns = [
+    # Admin site URL - provides an interface for managing application models and data.
     path('admin/', admin.site.urls),
-    # Include rest_framework and URLs as shown below in your main urls.py file:   
-    path('api_auth/', include('rest_framework.urls')),
-    path('main_app/', include(main_app_urls)), # add this path to your app
+    # Include REST framework authentication URLs - this allows for built-in authentication endpoints 
+    # such as login and logout when using the Django REST Framework.    
+    path('auth/', include('rest_framework.urls')),
+    # Main application URLs - this sets the base URL path and for the app and includes the URL patterns 
+    # defined in the main_app's 'urls.py', allowing access to the functionalities specific to that application.
+    path('main_app/', include('main_app.urls'))
 ]
