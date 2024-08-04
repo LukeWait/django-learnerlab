@@ -33,8 +33,7 @@ These will facilitate the means to complete the practical labs outlined in Djang
 - sql_ex
   - provides a platform to discover benefits of ORM and use of relational dbs with Django
 - nosql_ex
-  - highlights connections to external dbs
-  - focuses on implementing api endpoints which are required for db queries
+  - highlights connections to external dbs and challenges of not using models/ORM
 
 ## Table of Contents
 - [Installation](#installation)
