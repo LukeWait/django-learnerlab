@@ -14,6 +14,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 # Imports HTTP status codes and permissions classes for controlling access to API views.
 from rest_framework import status, permissions
+# Imports 'swagger_auto_schema', providing API documentation editing such as tags.
+from drf_yasg.utils import swagger_auto_schema 
 # Import the models defined in the 'models.py' file to be accessed by API views.
 from .models import RecordLabel, Musician, Album
 # Imports serializers in 'serializers.py' to convert model instances to JSON and validate incoming data.
@@ -40,9 +42,11 @@ class RecordLabelListApiView(APIView):
     It has no authorization check and allows all authenticated users full access.
     """
     permission_classes = [permissions.IsAuthenticated]
-
+    
+    # Use tags to categorize your API views in your OpenAPI documentation, providing filter options.
+    @swagger_auto_schema(tags=['Record Label'])
     def get(self, request, *args, **kwargs):
-        """List all the record labels.
+        """List all RecordLabel entries.
         
         This method retrieves all record label entries from the database and 
         returns them in a serialized format.
@@ -51,6 +55,7 @@ class RecordLabelListApiView(APIView):
         serializer = RecordLabelSerializer(record_labels, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    @swagger_auto_schema(tags=['Record Label'])
     def post(self, request, *args, **kwargs):
         """Create a new RecordLabel with the provided data.
         
@@ -64,8 +69,8 @@ class RecordLabelListApiView(APIView):
         }
         """
         data = {
-            'name': request.data.get('name'),        # Expects a string with a maximum length of 100 characters.
-            'address': request.data.get('address'),  # Expects a string with a maximum length of 300 characters.
+            'name': request.data.get('name'),        # Expects a string with a maximum length of 100 characters
+            'address': request.data.get('address'),  # Expects a string with a maximum length of 300 characters
             'email': request.data.get('email')       # Expects a valid email address.
         }
         serializer = RecordLabelSerializer(data=data)
@@ -82,8 +87,9 @@ class MusicianListApiView(APIView):
     """
     permission_classes = [permissions.IsAuthenticated]
 
+    @swagger_auto_schema(tags=['Musician'])
     def get(self, request, *args, **kwargs):
-        """List musicians based on user group.
+        """List all Musician entries based on user Group.
         
         This method retrieves musician entries from the database based on the user's Group.
         'Admin' users are able to view all, whereas 'Talent Agents' can only view musicians they manage.
@@ -102,6 +108,7 @@ class MusicianListApiView(APIView):
         serializer = MusicianSerializer(musicians, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    @swagger_auto_schema(tags=['Musician'])
     def post(self, request, *args, **kwargs):
         """Create a new Musician with the provided data.
         
@@ -116,10 +123,10 @@ class MusicianListApiView(APIView):
         """
         if request.user.groups.filter(name='Talent Agents').exists():
             data = {
-                'first_name': request.data.get('first_name'),  # Expects a string with a maximum length of 30 characters.
-                'last_name': request.data.get('last_name'),    # Expects a string with a maximum length of 30 characters.
-                'instrument': request.data.get('instrument'),  # Expects a string with a maximum length of 50 characters.
-                'agent': request.user.id                       # Automatically associates with agent 'id' if applicable.
+                'first_name': request.data.get('first_name'),  # Expects a string with a maximum length of 30 characters
+                'last_name': request.data.get('last_name'),    # Expects a string with a maximum length of 30 characters
+                'instrument': request.data.get('instrument'),  # Expects a string with a maximum length of 50 characters
+                'agent': request.user.id                       # Automatically associates with agent 'id' if applicable
             }
             serializer = MusicianSerializer(data=data)
             if serializer.is_valid():
@@ -142,8 +149,9 @@ class MusicianDetailApiView(APIView):
     """
     permission_classes = [permissions.IsAuthenticated]
 
+    @swagger_auto_schema(tags=['Musician'])
     def get_object(self, musician_id, user):
-        """Helper method to retrieve a Musician object by ID and associated user.
+        """Helper method to retrieve a Musician object by 'id' and associated user.
         
         This method checks if the musician exists and if the requesting user has
         the necessary permissions to access it.
@@ -153,8 +161,9 @@ class MusicianDetailApiView(APIView):
         except Musician.DoesNotExist:
             return None
 
+    @swagger_auto_schema(tags=['Musician'])
     def get(self, request, musician_id, *args, **kwargs):
-        """Retrieve the Musician with the given ID.
+        """Retrieve the Musician with the given 'id'.
         
         This method returns the serialized data of a specific musician if the user
         has permission to view it.
@@ -165,12 +174,13 @@ class MusicianDetailApiView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return Response(
-                {'res': 'Musician with the given ID does not exist or you do not have permission to view it'},
+                {'res': 'Musician with the given id does not exist or you do not have permission to view it'},
                 status=status.HTTP_404_NOT_FOUND
             )
-        
+
+    @swagger_auto_schema(tags=['Musician'])        
     def put(self, request, musician_id, *args, **kwargs):
-        """Update the Musician with the given ID.
+        """Update the Musician with the given 'id'.
         
         This method validates the input data and updates the corresponding musician
         entry in the database if the user has permission to modify it.
@@ -184,9 +194,9 @@ class MusicianDetailApiView(APIView):
         musician_instance = self.get_object(musician_id, request.user)
         if musician_instance:
             data = {
-                'first_name': request.data.get('first_name'),  # Expects a string with a maximum length of 30 characters.
-                'last_name': request.data.get('last_name'),    # Expects a string with a maximum length of 30 characters.
-                'instrument': request.data.get('instrument')   # Expects a string with a maximum length of 50 characters.
+                'first_name': request.data.get('first_name'),  # Expects a string with a maximum length of 30 characters
+                'last_name': request.data.get('last_name'),    # Expects a string with a maximum length of 30 characters
+                'instrument': request.data.get('instrument')   # Expects a string with a maximum length of 50 characters
             }
             serializer = MusicianSerializer(instance=musician_instance, data=data, partial=True)
             if serializer.is_valid():
@@ -196,12 +206,13 @@ class MusicianDetailApiView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(
-                {'res': 'Musician with the given ID does not exist or you do not have permission to update it'}, 
+                {'res': 'Musician with the given id does not exist or you do not have permission to update it'}, 
                 status=status.HTTP_404_NOT_FOUND
             )
-        
+
+    @swagger_auto_schema(tags=['Musician'])      
     def delete(self, request, musician_id, *args, **kwargs):
-        """Delete the Musician with the given ID.
+        """Delete the Musician with the given 'id'.
         
         This method removes the specified musician entry from the database if
         the user has permission to delete it.
@@ -212,7 +223,7 @@ class MusicianDetailApiView(APIView):
             return Response({'res': 'Musician deleted successfully.'}, status=status.HTTP_204_NO_CONTENT)   
         else:
             return Response(
-                {'res': 'Musician with the given ID does not exist or you do not have permission to delete it'}, 
+                {'res': 'Musician with the given id does not exist or you do not have permission to delete it'}, 
                 status=status.HTTP_404_NOT_FOUND
             )
         
@@ -224,8 +235,9 @@ class AlbumListApiView(APIView):
     """
     permission_classes = [permissions.IsAuthenticated]
 
+    @swagger_auto_schema(tags=['Album'])
     def get(self, request, *args, **kwargs):
-        """List all the albums for the authenticated user.
+        """List all Album entires for the authenticated user.
         
         This method retrieves all album entries from the database that the user
         has permission to view and returns them in a serialized format.
@@ -240,8 +252,9 @@ class AlbumListApiView(APIView):
                 status=status.HTTP_403_FORBIDDEN
             )  
 
+    @swagger_auto_schema(tags=['Album'])
     def post(self, request, *args, **kwargs):
-        """Create a new album with the provided data.
+        """Create a new Album with the provided data.
         
         This method validates and saves a new album entry in the database
         if the user has permission to add albums.
@@ -257,12 +270,12 @@ class AlbumListApiView(APIView):
         """
         if request.user.has_perm('main_app.add_album'):
             data = {
-                'title': request.data.get('title'),                 # Expects a string with a maximum length of 200 characters.
-                'artist': request.data.get('artist'),               # Expects a string with a maximum length of 200 characters.
-                'release_date': request.data.get('release_date'),   # Expects a A string in the format YYYY-MM-DD.
-                'genre': request.data.get('genre'),                 # Expects a string with a maximum length of 100 characters.
+                'title': request.data.get('title'),                 # Expects a string with a maximum length of 200 characters
+                'artist': request.data.get('artist'),               # Expects a string with a maximum length of 200 characters
+                'release_date': request.data.get('release_date'),   # Expects a A string in the format YYYY-MM-DD
+                'genre': request.data.get('genre'),                 # Expects a string with a maximum length of 100 characters
                 'label': request.data.get('label'),                 # Expects a int representing exiting record label 'id'
-                'album_members': request.data.get('album_members')  # Expects a list of ints representing existing musician 'id's.
+                'album_members': request.data.get('album_members')  # Expects a list of ints representing existing musician 'id's
             }
             serializer = AlbumSerializer(data=data)
             if serializer.is_valid():

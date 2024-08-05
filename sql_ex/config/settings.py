@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',      # Session framework
     'django.contrib.messages',      # Messaging framework
     'django.contrib.staticfiles',   # Static files management
-    # Declare the rest_framework toolkit to enable functionality.
+    # Declare the 'rest_framework' toolkit to enable functionality.
     'rest_framework',
     # List project apps here.
     'main_app',
@@ -67,11 +67,12 @@ ROOT_URLCONF = 'config.urls'
 # Template settings for rendering HTML. By default it looks for a directory within apps called 'templates'.
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',  # Template backend
-        'DIRS': [],                                                    # Additional directories to search for templates
-        'APP_DIRS': True,                                              # Enables template discovery in installed apps
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',             # Template backend
+        'DIRS': ['sql_ex_venv/lib/python3.10/site-packages/drf_yasg/templates'],  # Additional directories to search for templates
+                                                                                  # Path to 'drf_yasg' assets has been added
+        'APP_DIRS': True,                                                         # Enables template discovery in installed apps
         'OPTIONS': {
-            'context_processors': [                                    # Context processors to add context variables to templates
+            'context_processors': [                                               # Context processors to add context variables to templates
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
@@ -130,8 +131,12 @@ USE_TZ = True            # Enable timezone-aware datetimes
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
-# URL for serving static files.
+# URL for serving static files such as js, css, and images.
 STATIC_URL = 'static/'
+# Additional directories to search for static files - path to 'drf_yasg' assets has been added.
+STATICFILES_DIRS = [
+    'sql_ex_venv/lib/python3.10/site-packages/drf_yasg/static'
+]
 
 
 # Default primary key field type
