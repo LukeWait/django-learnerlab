@@ -1,14 +1,14 @@
-from django.http import HttpResponse
-from django.http import JsonResponse
+from django.shortcuts import render
+from django.http import HttpResponse, JsonResponse
 from django.core import serializers
 import json
 from bson.json_util import dumps
 
 # use pymongo to connect to db
 import pymongo
-client = pymongo.MongoClient('mongodb+srv://lukewait:tafenosql@cluster1.syijvpg.mongodb.net/test')
+client = pymongo.MongoClient('mongodb+srv://<username>:<password>@djangolab-cluster.y0zsa4f.mongodb.net/')
 # define db name
-dbname = client['meteorite_landings_db']
+dbname = client['nasa_data_db']
 # define collection
 collection = dbname['meteorite_landings']
 
@@ -16,7 +16,7 @@ collection = dbname['meteorite_landings']
 def index(request):
     return HttpResponse("<h1>Hello and welcome to my first <u>Django App</u> project!</h1>")
 
-'''
+"""
 # example record
 meteorite_1 = {
 	"name": "Apophis",
@@ -35,9 +35,9 @@ meteorite_details = collection.find({})
 # outputs all documents in collection to terminal
 for i in meteorite_details:
 	print(str(i['name']))
-'''
+"""
 
-def TheModelView(request):
+def MeteoriteLandingsApiView(request):
     if(request.method == "GET"):
         cursor = collection.find().limit(10)
         list_cur = list(cursor)
