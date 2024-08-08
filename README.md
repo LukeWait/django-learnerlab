@@ -4,8 +4,8 @@ A tutorial for Django beginners to get a project up and running. Aids in underst
 
 ### Work In Progress
 **Update**
-- sql_ex project is completed with ORM, REST framework, front end view, API views/endpoints, OpenAPI documentation support, and extensive commenting to explain the purpose of files, settings, methods, etc.
-- nosql_ex project has been setup with basic connectivity to MongoDB and can retrieve documents.
+- sql_ex project is completed with ORM, REST framework, front end view, API views (ViewSets), Routers and URL patterns, OpenAPI documentation support, and extensive commenting to explain the purpose of files, settings, methods, etc.
+- nosql_ex project has been setup with connectivity to MongoDB (PyMongo) and can retrieve documents. OpenAPI documentation working, REST framework utilized and APIView setup, extensive commenting in place. Will add some custom serializers for formatted responses, as well as more views and methods, and maybe some auth options when not using models.
 - Tutorial documents are starting to take shape, however, they are still in a rough draft state while I figure out what to cover, and in what order. 
 
 <p align="center">
