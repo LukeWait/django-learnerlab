@@ -33,7 +33,7 @@ u {
 p {
     font-size: 1.2em;
     margin-top: 20px;
-    max-width: 600px;
+    max-width: 800px;
     text-align: left;
 }
 
@@ -54,7 +54,7 @@ button:hover {
 
 #recordLabelData {
     margin-top: 20px;
-    max-width: 600px;
+    max-width: 800px;
     text-align: left;
     display: flex;
     justify-content: center;
@@ -73,4 +73,24 @@ th, td {
 
 th {
     background-color: #1e90ff;
+}
+
+.filter-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.filter-container div {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 10px;
+}
+
+label {
+    margin-bottom: 5px;
 }

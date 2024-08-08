@@ -9,8 +9,8 @@ and API views, where API views are designed for programmatic access to resources
 from django.shortcuts import render
 # Imports 'Response' class for returning responses in various formats.
 from rest_framework.response import Response
-# Imports HTTP viewsets, status codes and permissions classes for controlling access to API views.
-from rest_framework import viewsets, status, permissions
+# Imports HTTP viewsets, status codes, permissions ,and filter classes for controlling access to API views.
+from rest_framework import viewsets, status, permissions, filters
 # Import the models defined in the 'models.py' file to be accessed by API views.
 from .models import RecordLabel, Musician, Album
 # Imports serializers in 'serializers.py' to convert model instances to JSON and validate incoming data.
@@ -35,8 +35,10 @@ class RecordLabelViewSet(viewsets.ModelViewSet):
     """This viewset handles HTTP requests for managing record labels.
 
     It provides the full range of CRUD (Create, Read, Update, Delete) operations for 
-    record label entries in the database. This viewset uses the `RecordLabelSerializer`
-    for data serialization and validation. All operations require authentication.
+    record label entries in the database. Additionally, it supports filtering, searching, 
+    and ordering of query sets by accepting query parameters added to the URL by the 
+    JavaScript. This viewset uses the `RecordLabelSerializer` for data serialization 
+    and validation. All operations require authentication.
 
     Methods:
         - list: (GET) Retrieve a list of all RecordLabel instances.
@@ -56,14 +58,48 @@ class RecordLabelViewSet(viewsets.ModelViewSet):
 
     Returns:
         - list: A JSON array of serialized RecordLabel instances.
-        - create: A JSON object of the newly created RecordLabel instance.
+        - create: A JSON object of the newly created RecordLabel instance.pip 
         - retrieve: A JSON object of the specific RecordLabel instance.
         - update: A JSON object of the updated RecordLabel instance.
         - destroy: Status code indicating success (204 No Content) with no body, or an error message if deletion fails.
+        
+    Filtering and Sorting:
+        - `searchName`: Used to filter record labels based on their name, performing a case-insensitive 
+          partial match. Example: `/main_app/api/record_label/?searchName=Sumerian`
+        - `filter`: Allows filtering of record labels by exact name match. Example: `/main_app/api/record_label/?filter=Sumerian Records`
+        - `ordering`: Specify fields such as 'name', 'address', and 'email' to sort the results. 
+          Default ordering is by 'id'. Example: `/main_app/api/record_label/?ordering=name` 
+
+        You can combine multiple query parameters in a single URL. For instance: 
+        `/main_app/api/record_label/?searchName=Sumerian&filter=Sumerian Records&ordering=name`
     """
     queryset = RecordLabel.objects.all()
     serializer_class = RecordLabelSerializer
     permission_classes = [permissions.IsAuthenticated]
+    
+    # Add filter backends to support functions
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    # Add fields you want to allow filtering and ordering by
+    search_fields = ['name']
+    ordering_fields = ['name', 'address', 'email']
+    ordering = ['id'] # Default ordering parameter
+    
+    def get_queryset(self):
+        """Retrieves a queryset of RecordLabels based on search, filter, and order options.
+        
+        These options are appended to the URL as query parameters by JavaScript. It filters 
+        the queryset based on the provided search name or filter name if present.
+        """
+        queryset = super().get_queryset()
+        search_name = self.request.query_params.get('searchName', None)
+        filter_name = self.request.query_params.get('filter', None)
+
+        if search_name:
+            queryset = queryset.filter(name__icontains=search_name)
+        if filter_name:
+            queryset = queryset.filter(name__exact=filter_name)
+
+        return queryset
     
 class MusicianViewSet(viewsets.ModelViewSet):
     """This viewset handles HTTP requests for managing musicians.

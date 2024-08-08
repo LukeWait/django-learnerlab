@@ -10,10 +10,39 @@
 <body>
     <h1>Hello and welcome to the <u>sql_ex</u> front end!</h1>
     <h2>This page serves as the homepage/index of the sql_ex app: <u>main_app</u></h2>
-    <p>The URL endpoint is defined in the <u>urls.py</u> file. In this case it is '', indicating the root of <u>main_app/</u>. Endpoints always point to views which serve the content/functionality of the endpoint, defined in <u>views.py</u>. This page is a regular view, meaning it focuses on the front end by rendering HTML content for user interaction. It provides a graphic user interface (GUI) where users can navigate and access different features of the app.</p>
-    <p>In contrast, API views handle back-end operations, such as data retrieval and manipulation. For instance, when a user clicks the button below to fetch a list of records, the regular view (which renders this HTML file - <u>index.html</u>) calls the API endpoint <u>/main_app/api/recordlabel/</u> to fetch the necessary data using <u>main_app.js</u> (JavaScript). The API endpoint then points to the associated API view <u>RecordLabelListApiView</u> to process the request, interact with the database model <u>RecordLabel</u>, and return the serialized response in JSON format. The JavaScript function that called the API endpoint then processes the response as needed, and displays it on the HTML page.</p>
+    <p>The URL endpoint for this webpage is defined by both the <u>urls.py</u> file in the <u>config</u> directory, which specifies the root as <u>'main_app/'</u>, and the <u>urls.py</u> file in the <u>main_app</u> directory, which specifies the rest of the path and what view the endpoint is associated with. The endpoint is defined as <u>''</u> indicating no additional path is added, making it the root of <u>'main_app/'</u>.</p>
+    <p>Defined in <u>views.py</u>, views serve the content and functionality of endpoints. The view associated with this particular endpoint is <u>'index'</u>. It represents a regular view, meaning that when a user navigates to this endpoint, it prompts the server to provide an HTTP response containing the necessary rendering files—HTML, CSS, and JavaScript—to the client. The client then renders these files, providing a graphical user interface (GUI) that allows users to navigate and access various features of the app by way of interactive elements.</p>
+    <p>In contrast, API views are responsible for back-end operations, such as data retrieval and manipulation. For instance, when a user clicks the button below to fetch a list of records, the JavaScript in <u>main_app.js</u> makes a call from the client-side to the API endpoint <u>'/main_app/api/recordlabel/'</u> to retrieve the necessary data. This request is directed to the associated API view <u>'RecordLabelViewSet'</u> in <u>views.py</u>, which processes the request by interacting with the <u>RecordLabel</u> database model, and returns a serialized response in JSON format. The JavaScript function that initiated the API request then processes this response client-side and displays the data on the HTML page.</p>
+    <p>The filtering options selected by the user are included in the API request constructed by the JavaScript. For example, a request might look like <u>/main_app/api/record_label/?filter=Sumerian%20Records&</u>. The API ViewSet in <u>views.py</u> is able to process these parameters, enabling dynamic filtering based on user input and enhancing the versatility of the single endpoint.</p>
 
-    <button id="fetchRecordLabels">Fetch Record Labels</button>
+    <div class="filter-container">
+        <div>
+            <label for="searchName">Search Name:</label>
+            <input type="text" id="searchName">
+        </div>
+        <div>
+            <label for="filter">Filter:</label>
+            <select id="filter">
+                <option value="">No Filter</option>
+                <option value="Century Media Records">Century Media Records</option>
+                <option value="Kscope">Kscope</option>
+                <option value="Sumerian Records">Sumerian Records</option>
+            </select>
+        </div>
+        <div>
+            <label for="orderBy">Order By:</label>
+            <select id="orderBy">
+                <option value="">Default (id)</option>
+                <option value="name">Name</option>
+                <option value="address">Address</option>
+                <option value="email">Email</option>
+            </select>
+        </div>
+        <div>
+           <button id="fetchRecordLabels">Fetch Record Labels</button> 
+        </div>
+    </div>
+
     <div id="recordLabelData"></div>
 </body>
 </html>

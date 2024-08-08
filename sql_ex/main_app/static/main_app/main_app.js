@@ -1,6 +1,22 @@
 // Functions
 function fetchRecordLabels() {
-    fetch('/main_app/api/recordlabel/')
+    const searchName = document.getElementById('searchName').value;
+    const filter = document.getElementById('filter').value;
+    const orderBy = document.getElementById('orderBy').value;
+
+    let url = '/main_app/api/record_label/?';
+
+    if (searchName) {
+        url += `searchName=${encodeURIComponent(searchName)}&`;
+    }
+    if (filter) {
+        url += `filter=${encodeURIComponent(filter)}&`;
+    }
+    if (orderBy) {
+        url += `ordering=${encodeURIComponent(orderBy)}&`;
+    }
+
+    fetch(url)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok ' + response.statusText);
