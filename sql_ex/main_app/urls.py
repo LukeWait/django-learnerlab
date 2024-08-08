@@ -6,20 +6,27 @@ Each URL pattern is considered an endpoint (or API endpoint for API views), prov
 """
 
 # Import 'path' from Django's URL dispatcher to define URL patterns and map them to specific views.
-from django.urls import path
+from django.urls import path, include
 # Import all views from 'views.py' to utilize specific functions and classes for handling requests and responses.
 from . import views
 
+# Import 'DefaultRouter' from Django REST Framework to create a router that automatically generates URL conf for ViewSets.
+from rest_framework.routers import DefaultRouter
+# Initialize the router instance that will manage the URL routing for API endpoints, mapping them to the corresponding ViewSets.
+router = DefaultRouter()
+# Register ViewSets with the router. This allows for automatic generation of the standard CRUD URLs for each ViewSet.
+# The registered name becomes part of the endpoint path.
+router.register(r'record_label', views.RecordLabelViewSet)
+router.register(r'musician', views.MusicianViewSet)
+router.register(r'album', views.AlbumViewSet)
+
 # URL patterns define the routes for the application, mapping specific URL paths to their corresponding view functions.
 # The base URL is defined in 'config/urls.py' (main_app/), so these serve as an extension to that.
-# For example when using 'python manage.py runserver 10.0.0.42:8000' -> http://10.0.0.42:8000/main_app/api/recordlabel/
+# For example when using 'python manage.py runserver' -> http://127.0.0.1:8000/main_app/api/record_label/
 urlpatterns = [
     # Endpoints - represent routes in the application that provide access to various client-facing views, such as web pages or forms.
     path('', views.index, name='index'),
-    # API endpoints - represent routes that allow programmatic access to the application's backend functionalities, 
-    # enabling clients to interact with the data through HTTP requests.
-    path('api/recordlabel/', views.RecordLabelListApiView.as_view()),
-    path('api/musician/', views.MusicianListApiView.as_view()),
-    path('api/musician/<int:musician_id>/', views.MusicianDetailApiView.as_view()),
-    path('api/album/', views.AlbumListApiView.as_view()),
+    # API endpoints - the registered routes need to be included in the urlpatterns. It's common practice to include 'api/' in the
+    # path to ensure all your API endpoints have a clear distinction.
+    path('api/', include(router.urls)),
 ]

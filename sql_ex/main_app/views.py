@@ -7,15 +7,10 @@ and API views, where API views are designed for programmatic access to resources
 
 # Imports the 'render' function to serve HTML files (templates) as HttpResponse.
 from django.shortcuts import render
-# Imports the 'HttpResponse' function to serve simple HTTP responses.
-from django.http import HttpResponse
-# Imports 'APIView' class to create structured API views, and 'Response' class for returning responses in various formats.
-from rest_framework.views import APIView
+# Imports 'Response' class for returning responses in various formats.
 from rest_framework.response import Response
-# Imports HTTP status codes and permissions classes for controlling access to API views.
-from rest_framework import status, permissions
-# Imports 'swagger_auto_schema', providing API documentation editing such as tags.
-from drf_yasg.utils import swagger_auto_schema 
+# Imports HTTP viewsets, status codes and permissions classes for controlling access to API views.
+from rest_framework import viewsets, status, permissions
 # Import the models defined in the 'models.py' file to be accessed by API views.
 from .models import RecordLabel, Musician, Album
 # Imports serializers in 'serializers.py' to convert model instances to JSON and validate incoming data.
@@ -23,268 +18,253 @@ from .serializers import RecordLabelSerializer, MusicianSerializer, AlbumSeriali
 
 # Regular views - Regular views in Django respond to HTTP requests by returning HTML content. 
 # They can utilize the 'render' function, which points to a given template (like 'index.html') with context data to 
-# produce a complete HTML response. Alternatively, views can directly return an 'HttpResponse' object for simpler responses.
+# produce a complete HTML response. Alternatively, views can directly return a 'HttpResponse' object for simpler responses.
 def index(request):
     """This function handles rendering the main index page of the application.
     """
     # By default 'render' looks in the 'templates' directory, so this points to main_app/templates/main_app/index.html
     return render(request, 'main_app/index.html')
-    # return HttpResponse("<h1>Hello and welcome to the <u>sql_ex</u> front end!</h1>")
 
-# API Views - API views in Django, particularly when using the Django REST Framework, are designed
-# to handle programmatic access to resources. They typically return data in formats like 
-# JSON, which is suitable for client-side applications or other services. The APIView 
-# class provides a structure for defining HTTP methods (GET, POST, etc.) to manage requests and responses. 
-# It allows you to handle authentication, permissions, and data serialization.
-class RecordLabelListApiView(APIView):
-    """This class-based API view handles HTTP requests for listing and creating record labels.
-    
-    It has no authorization check and allows all authenticated users full access.
-    """
-    permission_classes = [permissions.IsAuthenticated]
-    
-    # Use tags to categorize your API views in your OpenAPI documentation, providing filter options.
-    @swagger_auto_schema(tags=['Record Label'])
-    def get(self, request, *args, **kwargs):
-        """List all RecordLabel entries.
-        
-        This method retrieves all record label entries from the database and 
-        returns them in a serialized format.
-        """
-        record_labels = RecordLabel.objects.all()
-        serializer = RecordLabelSerializer(record_labels, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+# API Views - API views in Django, particularly when using the Django REST Framework, are designed to handle programmatic access 
+# to resources. They typically return data in formats like JSON, which is suitable for client-side applications or other services.
+# ViewSets - ViewSets provided by the Django REST Framework library simplify the implementation of CRUD operations by grouping
+# related API views for a model into a single class. They automatically handle requests based on HTTP methods (GET, POST, PUT, 
+# PATCH, DELETE) and support features like authentication, permissions, and data serialization. These features drastically reduce 
+# the amount of code required.
+class RecordLabelViewSet(viewsets.ModelViewSet):
+    """This viewset handles HTTP requests for managing record labels.
 
-    @swagger_auto_schema(tags=['Record Label'])
-    def post(self, request, *args, **kwargs):
-        """Create a new RecordLabel with the provided data.
-        
-        This method validates and saves a new record label entry in the database.
-        If the data is valid, a new record label is created. 
-        Example valid input:
+    It provides the full range of CRUD (Create, Read, Update, Delete) operations for 
+    record label entries in the database. This viewset uses the `RecordLabelSerializer`
+    for data serialization and validation. All operations require authentication.
+
+    Methods:
+        - list: (GET) Retrieve a list of all RecordLabel instances.
+        - create: (POST) Create a new RecordLabel instance.
+        - retrieve: (GET) Retrieve a specific RecordLabel instance by ID.
+        - update: (PUT) Update a specific RecordLabel instance by ID, only if the user manages it.
+                  (PATCH) Update specific fields of a RecordLabel instance by ID.
+        - destroy: (DELETE) Delete a specific RecordLabel instance by ID.
+
+    Parameters:
+        The expected input for create and update actions is in JSON format:
         {
-            "name": "Example Label",
-            "address": "123 Music Lane, Melody City, 12345",
-            "email": "contact@examplelabel.com"
+            "name": "Example Label",                          # Expects a string with a maximum length of 100 characters.
+            "address": "123 Music Lane, Melody City, 12345",  # Expects a string with a maximum length of 300 characters.
+            "email": "contact@examplelabel.com"               # Expects a valid email address.
         }
-        """
-        data = {
-            'name': request.data.get('name'),        # Expects a string with a maximum length of 100 characters
-            'address': request.data.get('address'),  # Expects a string with a maximum length of 300 characters
-            'email': request.data.get('email')       # Expects a valid email address.
-        }
-        serializer = RecordLabelSerializer(data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-class MusicianListApiView(APIView):
-    """This class-based API view handles HTTP requests for listing and creating musicians.
-    
-    It uses Groups to authorize authenticated users to view and create 'Musician' entries.
+    Returns:
+        - list: A JSON array of serialized RecordLabel instances.
+        - create: A JSON object of the newly created RecordLabel instance.
+        - retrieve: A JSON object of the specific RecordLabel instance.
+        - update: A JSON object of the updated RecordLabel instance.
+        - destroy: Status code indicating success (204 No Content) with no body, or an error message if deletion fails.
     """
+    queryset = RecordLabel.objects.all()
+    serializer_class = RecordLabelSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    
+class MusicianViewSet(viewsets.ModelViewSet):
+    """This viewset handles HTTP requests for managing musicians.
+
+    It provides the full range of CRUD (Create, Read, Update, Delete) operations for 
+    musician entries in the database, with specific access controls based on user groups.
+    Only 'Talent Agents' can create a new musician. In addition, editing specific musicians 
+    (retrive, update, and destroy) can only be performed by the 'agent' who manages the musician.
+    This viewset uses the `MusicianSerializer` for data serialization and validation.
+    All operations require authentication.
+
+    Methods:
+        - list: (GET) Retrieve a list of all Musician instances based on user Group.
+        - create: (POST) Create a new Musician instance associated with the current user.
+        - retrieve: (GET) Retrieve a specific Musician instance by ID, only if the user manages it.
+        - update: (PUT) Update a specific Musician instance by ID, only if the user manages it.
+                  (PATCH) Update specific fields of a Musician instance by ID.
+        - destroy: (DELETE) Delete a specific Musician instance by ID, only if the user manages it.
+
+    Parameters:
+        The expected input for create and update actions is in JSON format:
+        {
+            "first_name": "Luke",   # Expects a string with a maximum length of 30 characters.
+            "last_name": "Wait",    # Expects a string with a maximum length of 30 characters.
+            "instrument": "Guitar"  # Expects a string with a maximum length of 50 characters.
+        }
+
+    Returns:
+        - list: A JSON array of serialized Musician instances based on user Group.
+        - create: A JSON object of the newly created Musician instance.
+        - retrieve: A JSON object of the specific Musician instance.
+        - update: A JSON object of the updated Musician instance.
+        - destroy: Status code indicating success (204 No Content) with no body, or an error message if deletion fails.
+    """
+    queryset = Musician.objects.all()
+    serializer_class = MusicianSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-    @swagger_auto_schema(tags=['Musician'])
-    def get(self, request, *args, **kwargs):
-        """List all Musician entries based on user Group.
-        
-        This method retrieves musician entries from the database based on the user's Group.
-        'Admin' users are able to view all, whereas 'Talent Agents' can only view musicians they manage.
-        """
-        if request.user.groups.filter(name='Admin').exists():
-            musicians = Musician.objects.all()
-        elif request.user.groups.filter(name='Talent Agents').exists():
-            musicians = Musician.objects.filter(agent=request.user)
-        else:
-            # If the user was not in either group they would be denied access.
-            return Response(
-                {'res': 'You do not have permission to view musicians.'},
-                status=status.HTTP_403_FORBIDDEN
-            )
-        
-        serializer = MusicianSerializer(musicians, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    def get_queryset(self):
+        """Retrieve a queryset of Musician instances based on the user's group.
 
-    @swagger_auto_schema(tags=['Musician'])
-    def post(self, request, *args, **kwargs):
+        Admin users can view all musicians, while Talent Agents can only view musicians they manage.
+        
+        This method is used by the parent class methods (e.g., list, retrieve, update, destroy) through the
+        super() function to ensure that the queryset reflects the permissions of the authenticated user.
+        """
+        if self.request.user.groups.filter(name='Admin').exists():
+            return Musician.objects.all()
+        elif self.request.user.groups.filter(name='Talent Agents').exists():
+            return Musician.objects.filter(agent=self.request.user)
+        else:
+            return Musician.objects.none()
+
+    # Override the create method to enforce group-based authorization
+    def create(self, request, *args, **kwargs):
         """Create a new Musician with the provided data.
-        
-        This method validates and saves a new musician entry in the database, associating it with the current user. 
+
         Only users belonging to the 'Talent Agents' Group can use this method.
-        Example valid input:
-        {
-            "first_name": "Luke",
-            "last_name": "Wait",
-            "instrument": "Guitar"
-        }
         """
-        if request.user.groups.filter(name='Talent Agents').exists():
-            data = {
-                'first_name': request.data.get('first_name'),  # Expects a string with a maximum length of 30 characters
-                'last_name': request.data.get('last_name'),    # Expects a string with a maximum length of 30 characters
-                'instrument': request.data.get('instrument'),  # Expects a string with a maximum length of 50 characters
-                'agent': request.user.id                       # Automatically associates with agent 'id' if applicable
-            }
-            serializer = MusicianSerializer(data=data)
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
-            
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            return Response(
-                {'res': 'You do not have permission to create a musician.'},
-                status=status.HTTP_403_FORBIDDEN
-            )
-            
-class MusicianDetailApiView(APIView):
-    """This class-based API view handles HTTP requests for individual musician details.
-    
-    It authorizes authenticated users by comparing the current user to the 'agent' field of the musician with the 
-    'musician_id' passed in with the endpoint for this class - defined in 'urls.py' as 'api/musician/<int:musician_id>/'.
-    This implies only the agent that manages a musician can perform these methods (GET, PUT, DELETE).
+        if not request.user.groups.filter(name='Talent Agents').exists():
+            return Response({'res': 'You do not have permission to create a musician.'},
+                            status=status.HTTP_403_FORBIDDEN)
+
+        return super().create(request, *args, **kwargs)
+
+    # Override the retrieve method to enforce group-based authorization
+    def retrieve(self, request, *args, **kwargs):
+        """Retrieve a specific Musician instance by ID.
+
+        Only the agent that manages a musician can perform this action.
+        """
+        musician_instance = self.get_object()
+        if musician_instance.agent != request.user:
+            return Response({'res': 'You do not have permission to view this musician.'},
+                            status=status.HTTP_403_FORBIDDEN)
+
+        return super().retrieve(request, *args, **kwargs)
+
+    # Override the update method to enforce group-based authorization
+    def update(self, request, *args, **kwargs):
+        """Update a specific Musician instance by ID.
+
+        Only the agent that manages the musician can perform this action.
+        """
+        musician_instance = self.get_object()
+        if musician_instance.agent != request.user:
+            return Response({'res': 'You do not have permission to update this musician.'},
+                            status=status.HTTP_403_FORBIDDEN)
+
+        return super().update(request, *args, **kwargs)
+
+    # Override the destroy method to enforce group-based authorization
+    def destroy(self, request, *args, **kwargs):
+        """Delete a specific Musician instance by ID.
+
+        Only the agent that manages the musician can perform this action.
+        """
+        musician_instance = self.get_object()
+        if musician_instance.agent != request.user:
+            return Response({'res': 'You do not have permission to delete this musician.'},
+                            status=status.HTTP_403_FORBIDDEN)
+
+        return super().destroy(request, *args, **kwargs)
+ 
+class AlbumViewSet(viewsets.ModelViewSet):
+    """This viewset handles HTTP requests for managing albums.
+
+    It provides the full range of CRUD (Create, Read, Update, Delete) operations for 
+    album entries in the database, with specific access controls based on user permissions.
+    It authorizes authenticated users by checking they have explicit permission in Users/Groups. Only 'Admin' should be 
+    able to access these API views as 'Talent Agents' are only granted CRUD permissions on the 'Musician' model.
+    This viewset uses the `AlbumSerializer` for data serialization and validation.
+    All operations require authentication.
+
+    Methods:
+        - list: (GET) Retrieve a list of all Album instances that the user has permission to view.
+        - create: (POST) Create a new Album instance associated with the current user, if the user has permission.
+        - retrieve: (GET) Retrieve a specific Album instance by ID, only if the user has permission to view it.
+        - update: (PUT) Update a specific Album instance by ID, only if the user has permission to change it.
+                  (PATCH) Update specific fields of an Album instance by ID, subject to permissions.
+        - destroy: (DELETE) Delete a specific Album instance by ID, only if the user has permission to delete it.
+
+    Parameters:
+        The expected input for create and update actions is in JSON format:
+        {
+            "title": "My New Album",            # Expects a string with a maximum length of 200 characters.
+            "artist": "Famous Artist",          # Expects a string with a maximum length of 200 characters.
+            "release_date": "2024-08-04",       # Expects a string in the format YYYY-MM-DD.
+            "genre": "Rock",                     # Expects a string with a maximum length of 100 characters.
+            "label": 1,                         # Expects an int representing an existing record label 'id'.
+            "album_members": [2, 3]             # Expects a list of ints representing existing musician 'id's.
+        }
+
+    Returns:
+        - list: A JSON array of serialized Album instances that the user has permission to view.
+        - create: A JSON object of the newly created Album instance.
+        - retrieve: A JSON object of the specific Album instance.
+        - update: A JSON object of the updated Album instance.
+        - destroy: Status code indicating success (204 No Content) with no body, or an error message if deletion fails.
     """
+    queryset = Album.objects.all()
+    serializer_class = AlbumSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-    @swagger_auto_schema(tags=['Musician'])
-    def get_object(self, musician_id, user):
-        """Helper method to retrieve a Musician object by 'id' and associated user.
+    # Override the list method to enforce permission based authorization
+    def list(self, request, *args, **kwargs):
+        """List all Album entries for the authenticated user.
         
-        This method checks if the musician exists and if the requesting user has
-        the necessary permissions to access it.
+        Only users with the permission 'main_app.view_album' can use this method.
         """
-        try:
-            return Musician.objects.get(id=musician_id, agent=user)
-        except Musician.DoesNotExist:
-            return None
+        if not request.user.has_perm('main_app.view_album'):
+            return Response({'res': 'You do not have permission to view albums.'},
+                            status=status.HTTP_403_FORBIDDEN)
 
-    @swagger_auto_schema(tags=['Musician'])
-    def get(self, request, musician_id, *args, **kwargs):
-        """Retrieve the Musician with the given 'id'.
-        
-        This method returns the serialized data of a specific musician if the user
-        has permission to view it.
-        """
-        musician_instance = self.get_object(musician_id, request.user)
-        if musician_instance:
-            serializer = MusicianSerializer(musician_instance)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        else:
-            return Response(
-                {'res': 'Musician with the given id does not exist or you do not have permission to view it'},
-                status=status.HTTP_404_NOT_FOUND
-            )
+        return super().list(request, *args, **kwargs)
 
-    @swagger_auto_schema(tags=['Musician'])        
-    def put(self, request, musician_id, *args, **kwargs):
-        """Update the Musician with the given 'id'.
-        
-        This method validates the input data and updates the corresponding musician
-        entry in the database if the user has permission to modify it.
-        Example valid input:
-        {
-            "first_name": "Luke",
-            "last_name": "Wait",
-            "instrument": "Guitar"
-        }
-        """
-        musician_instance = self.get_object(musician_id, request.user)
-        if musician_instance:
-            data = {
-                'first_name': request.data.get('first_name'),  # Expects a string with a maximum length of 30 characters
-                'last_name': request.data.get('last_name'),    # Expects a string with a maximum length of 30 characters
-                'instrument': request.data.get('instrument')   # Expects a string with a maximum length of 50 characters
-            }
-            serializer = MusicianSerializer(instance=musician_instance, data=data, partial=True)
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data, status=status.HTTP_200_OK)
-            
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            return Response(
-                {'res': 'Musician with the given id does not exist or you do not have permission to update it'}, 
-                status=status.HTTP_404_NOT_FOUND
-            )
-
-    @swagger_auto_schema(tags=['Musician'])      
-    def delete(self, request, musician_id, *args, **kwargs):
-        """Delete the Musician with the given 'id'.
-        
-        This method removes the specified musician entry from the database if
-        the user has permission to delete it.
-        """
-        musician_instance = self.get_object(musician_id, request.user)
-        if musician_instance:
-            musician_instance.delete()
-            return Response({'res': 'Musician deleted successfully.'}, status=status.HTTP_204_NO_CONTENT)   
-        else:
-            return Response(
-                {'res': 'Musician with the given id does not exist or you do not have permission to delete it'}, 
-                status=status.HTTP_404_NOT_FOUND
-            )
-        
-class AlbumListApiView(APIView):
-    """This class-based API view handles HTTP requests for listing and creating albums.
-    
-    It authorizes authenticated users by checking they have explicit permission in Users/Groups.
-    Only 'Admin' should be able to access these APIs as 'Talent Agents' are only granted CRUD permissions on the 'Musician' model. 
-    """
-    permission_classes = [permissions.IsAuthenticated]
-
-    @swagger_auto_schema(tags=['Album'])
-    def get(self, request, *args, **kwargs):
-        """List all Album entires for the authenticated user.
-        
-        This method retrieves all album entries from the database that the user
-        has permission to view and returns them in a serialized format.
-        """
-        if request.user.has_perm('main_app.view_album'):
-            albums = Album.objects.all()
-            serializer = AlbumSerializer(albums, many=True)
-            return Response(serializer.data, status=status.HTTP_200_OK)   
-        else:
-            return Response(
-                {'detail': 'You do not have permission to view albums.'},
-                status=status.HTTP_403_FORBIDDEN
-            )  
-
-    @swagger_auto_schema(tags=['Album'])
-    def post(self, request, *args, **kwargs):
+    # Override the create method to enforce permission based authorization
+    def create(self, request, *args, **kwargs):
         """Create a new Album with the provided data.
         
-        This method validates and saves a new album entry in the database
-        if the user has permission to add albums.
-        Example valid input:
-        {
-            "title": "My New Album",
-            "artist": "Famous Artist",
-            "release_date": "2024-08-04",
-            "genre": "Rock",
-            "label": 1,
-            "album_members": [2, 3]
-        }
+        Only users with the permission 'main_app.add_album' can use this method.
         """
-        if request.user.has_perm('main_app.add_album'):
-            data = {
-                'title': request.data.get('title'),                 # Expects a string with a maximum length of 200 characters
-                'artist': request.data.get('artist'),               # Expects a string with a maximum length of 200 characters
-                'release_date': request.data.get('release_date'),   # Expects a A string in the format YYYY-MM-DD
-                'genre': request.data.get('genre'),                 # Expects a string with a maximum length of 100 characters
-                'label': request.data.get('label'),                 # Expects a int representing exiting record label 'id'
-                'album_members': request.data.get('album_members')  # Expects a list of ints representing existing musician 'id's
-            }
-            serializer = AlbumSerializer(data=data)
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
+        if not request.user.has_perm('main_app.add_album'):
+            return Response({'res': 'You do not have permission to create an album.'},
+                            status=status.HTTP_403_FORBIDDEN)
 
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            return Response(
-                {'detail': 'You do not have permission to add albums.'},
-                status=status.HTTP_403_FORBIDDEN
-            )
+        return super().create(request, *args, **kwargs)
+
+    # Override the retrieve method to enforce permission based authorization
+    def retrieve(self, request, *args, **kwargs):
+        """Retrieve a specific Album instance by ID.
+        
+        Only users with the permission 'main_app.view_album' can use this method.
+        """
+        if not request.user.has_perm('main_app.view_album'):
+            return Response({'res': 'You do not have permission to view this album.'},
+                            status=status.HTTP_403_FORBIDDEN)
+
+        return super().retrieve(request, *args, **kwargs)
+
+    # Override the udpate method to enforce permission based authorization
+    def update(self, request, *args, **kwargs):
+        """Update a specific Album instance by ID.
+        
+        Only users with the permission 'main_app.change_album' can use this method.
+        """
+        if not request.user.has_perm('main_app.change_album'):
+            return Response({'res': 'You do not have permission to update this album.'},
+                            status=status.HTTP_403_FORBIDDEN)
+
+        return super().update(request, *args, **kwargs)
+
+    # Override the destroy method to enforce permission based authorization
+    def destroy(self, request, *args, **kwargs):
+        """Delete a specific Album instance by ID.
+        
+        Only users with the permission 'main_app.delete_album' can use this method.
+        """
+        if not request.user.has_perm('main_app.delete_album'):
+            return Response({'res': 'You do not have permission to delete this album.'},
+                            status=status.HTTP_403_FORBIDDEN)
+
+        return super().destroy(request, *args, **kwargs)
+    

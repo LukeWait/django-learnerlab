@@ -19,7 +19,8 @@ class RecordLabelSerializer(serializers.ModelSerializer):
         which fields should be included or excluded from the serialized output.
         """
         model = RecordLabel
-        fields = ['id', 'name', 'address', 'email']
+        # You can opt to include all fields from the associated model.
+        fields = '__all__'
 
 class MusicianSerializer(serializers.ModelSerializer):
     """Serializer for the Musician model.
@@ -32,6 +33,7 @@ class MusicianSerializer(serializers.ModelSerializer):
         which fields should be included or excluded from the serialized output.
         """
         model = Musician
+        # Specify the fields to be included to abstract the agent 'id' since we're using 'agent_username'.
         fields = ['id', 'first_name', 'last_name', 'instrument', 'agent_username']
 
 class AlbumSerializer(serializers.ModelSerializer):
@@ -47,4 +49,4 @@ class AlbumSerializer(serializers.ModelSerializer):
         which fields should be included or excluded from the serialized output.
         """
         model = Album
-        fields = ['id', 'title', 'artist', 'release_date', 'genre', 'label', 'album_members']
+        fields = '__all__'
