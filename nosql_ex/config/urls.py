@@ -50,9 +50,6 @@ main_app_schema_view = get_schema_view(
 urlpatterns = [
     # Admin site URL - provides an interface for managing application models and data.
     # path('admin/', admin.site.urls),
-    # Include REST framework authentication URLs - this allows for built-in authentication endpoints 
-    # such as login and logout when using the Django REST Framework.    
-    #path('auth/', include('rest_framework.urls')),
     
     # Define endpoints for accessing the OpenAPI schema documentation in different formats (JSON or YAML).
     # This allows developers to programmatically retrieve the API specifications in standard formats.
@@ -64,4 +61,7 @@ urlpatterns = [
     # Main application URLs - this sets the base URL path and for the app and includes the URL patterns 
     # defined in the main_app's 'urls.py', allowing access to the functionalities specific to that application.
     path('main_app/', include('main_app.urls')),
+    # Auth application URLs - same as Main application but for authentication fucntionalities defined in auth_app.
+    # This app handles user/role syncronisation with MongoDB and uses the data for authentication purposes.
+    path('auth_app/', include('auth_app.urls')),
 ]

@@ -38,8 +38,8 @@ ALLOWED_HOSTS = ['*']
 
 # List of installed applications. This includes Django's built-in apps and custom apps.
 INSTALLED_APPS = [
-    'django.contrib.admin',         # Admin interface
-    'django.contrib.auth',          # Authentication system
+    # 'django.contrib.admin',       # Admin interface
+    # 'django.contrib.auth',        # Authentication system
     'django.contrib.contenttypes',  # Content types framework
     'django.contrib.sessions',      # Session framework
     'django.contrib.messages',      # Messaging framework
@@ -48,17 +48,18 @@ INSTALLED_APPS = [
     'rest_framework',
     # List project apps here.
     'main_app',
+    'auth_app',
 ]
 
 # Middleware to process requests and responses globally.
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',            # Security enhancements
-    'django.contrib.sessions.middleware.SessionMiddleware',     # Session support
-    'django.middleware.common.CommonMiddleware',                # Common functionalities
-    'django.middleware.csrf.CsrfViewMiddleware',              # Cross-site request forgery protection
-    'django.contrib.auth.middleware.AuthenticationMiddleware',  # User authentication
-    'django.contrib.messages.middleware.MessageMiddleware',     # Enables messages framework
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',   # Clickjacking protection
+    'django.middleware.security.SecurityMiddleware',              # Security enhancements
+    'django.contrib.sessions.middleware.SessionMiddleware',       # Session support
+    'django.middleware.common.CommonMiddleware',                  # Common functionalities
+    'django.middleware.csrf.CsrfViewMiddleware',                  # Cross-site request forgery protection
+    # 'django.contrib.auth.middleware.AuthenticationMiddleware',  # User authentication
+    'django.contrib.messages.middleware.MessageMiddleware',       # Enables messages framework
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',     # Clickjacking protection
 ]
 
 # The URL configuration module for this Django project.
