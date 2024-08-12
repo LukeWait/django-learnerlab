@@ -5,7 +5,7 @@ A tutorial for Django beginners to get a project up and running. Aids in underst
 ### Work In Progress
 **Update**
 - sql_ex project is completed with ORM, REST framework, front end view, API views (ViewSets), Routers and URL patterns, OpenAPI documentation support, and extensive commenting to explain the purpose of files, settings, methods, etc.
-- nosql_ex project has been setup with connectivity to MongoDB (PyMongo) and can retrieve documents. OpenAPI documentation working, REST framework utilized and APIView setup, extensive commenting in place. Will add some custom serializers for formatted responses, as well as more views and methods, and maybe some auth options when not using models.
+- nosql_ex project has been setup with connectivity to MongoDB (PyMongo) and can retrieve documents. OpenAPI documentation working, REST framework utilized and APIView setup, extensive commenting in place. Currently working on custom auth/admin app.
 - Tutorial documents are starting to take shape, however, they are still in a rough draft state while I figure out what to cover, and in what order. 
 
 <p align="center">
@@ -112,7 +112,8 @@ The Django projects contained in this repo contain project templates/boilerplate
 - Authorization restrictions are in place and endpoints responding as expected.
 
 **nosql_ex**
-- Basic APIView and external MongoDB connection has been established.
+- Custom API views and external MongoDB connection has been established.
+- API endpoints tested succesfully with ThunderClient and Swagger.
 
 ## License
 This project is licensed under the MIT License. See the LICENSE file for details.
@@ -127,7 +128,7 @@ The source code for this project can be found in the GitHub repository: [https:/
 ## Dependencies
 **sql_ex**
 - asgiref==3.8.1
-- Django==5.0.7
+- Django==5.1
 - djangorestframework==3.15.2
 - drf-yasg==1.21.7
 - inflection==0.5.1
@@ -141,8 +142,19 @@ The source code for this project can be found in the GitHub repository: [https:/
 
 **nosql_ex**
 - asgiref==3.8.1
-- Django==5.0.7
+- certifi==2024.7.4
+- charset-normalizer==3.3.2
+- Django==5.1
 - dnspython==2.6.1
+- drf-yasg==1.21.7
+- idna==3.7
+- inflection==0.5.1
+- packaging==24.1
 - pymongo==4.8.0
+- pytz==2024.1
+- PyYAML==6.0.2
+- requests==2.32.3
 - sqlparse==0.5.1
 - typing_extensions==4.12.2
+- uritemplate==4.1.1
+- urllib3==2.2.2

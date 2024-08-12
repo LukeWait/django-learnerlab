@@ -12,8 +12,8 @@ from . import views
 
 # URL patterns define the routes for the application, mapping specific URL paths to their corresponding view functions.
 # The base URL is defined in 'config/urls.py' (auth_app/), so these serve as an extension to that.
-# For example when using 'python manage.py runserver' -> http://127.0.0.1:8000/main_app/api/user_login/
+# For example when using 'python manage.py runserver' -> http://127.0.0.1:8000/main_app/api/user_manage/
 urlpatterns = [
     path('',views.index,name='index'),
-    path('api/user_login/', views.UserLoginApiView.as_view())
+    path('api/user_manage/', views.UserManageApiView.as_view())
     ]

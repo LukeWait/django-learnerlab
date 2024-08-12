@@ -44,8 +44,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',      # Session framework
     'django.contrib.messages',      # Messaging framework
     'django.contrib.staticfiles',   # Static files management
-    # Declare the 'rest_framework' toolkit to enable functionality.
-    'rest_framework',
     # List project apps here.
     'main_app',
     'auth_app',
@@ -56,7 +54,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',              # Security enhancements
     'django.contrib.sessions.middleware.SessionMiddleware',       # Session support
     'django.middleware.common.CommonMiddleware',                  # Common functionalities
-    'django.middleware.csrf.CsrfViewMiddleware',                  # Cross-site request forgery protection
+    # 'django.middleware.csrf.CsrfViewMiddleware',                  # Cross-site request forgery protection
     # 'django.contrib.auth.middleware.AuthenticationMiddleware',  # User authentication
     'django.contrib.messages.middleware.MessageMiddleware',       # Enables messages framework
     'django.middleware.clickjacking.XFrameOptionsMiddleware',     # Clickjacking protection

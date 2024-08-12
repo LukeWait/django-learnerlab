@@ -23,9 +23,6 @@ Including another URLconf
 # Import the 'include' function to reference other URL configurations.
 from django.urls import path, include, re_path
 
-# Import the permissions module from Django REST Framework to manage access control for viewing API schema documentation.
-# from rest_framework import permissions
-
 # Import functions from drf_yasg to create schema views for API documentation.
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
