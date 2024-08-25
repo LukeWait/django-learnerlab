@@ -164,4 +164,4 @@ cython_debug/
 #.idea/
 
 # Custom ignore
-docs/images/
+docs/screenshots/
