@@ -128,7 +128,7 @@ The source code for this project can be found in the GitHub repository: [https:/
 ## Dependencies
 **sql_ex**
 - asgiref==3.8.1
-- Django==5.1.1
+- Django==5.1.9
 - djangorestframework==3.15.2
 - drf-yasg==1.21.7
 - inflection==0.5.1
@@ -144,7 +144,7 @@ The source code for this project can be found in the GitHub repository: [https:/
 - asgiref==3.8.1
 - certifi==2024.7.4
 - charset-normalizer==3.3.2
-- Django==5.1
+- Django==5.1.9
 - dnspython==2.6.1
 - drf-yasg==1.21.7
 - idna==3.7
