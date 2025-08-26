@@ -1,7 +1,7 @@
 asgiref==3.8.1
 certifi==2024.7.4
 charset-normalizer==3.3.2
-Django==5.1.9
+Django==5.1.10
 dnspython==2.6.1
 drf-yasg==1.21.7
 idna==3.7
@@ -10,8 +10,8 @@ packaging==24.1
 pymongo==4.8.0
 pytz==2024.1
 PyYAML==6.0.2
-requests==2.32.3
+requests==2.32.4
 sqlparse==0.5.1
 typing_extensions==4.12.2
 uritemplate==4.1.1
-urllib3==2.2.2
+urllib3==2.5.0
