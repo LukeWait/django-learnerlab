@@ -7,11 +7,11 @@ drf-yasg==1.21.7
 idna==3.15
 inflection==0.5.1
 packaging==24.1
-pymongo==4.8.0
+pymongo==4.18.2
 pytz==2024.1
 PyYAML==6.0.2
 requests==2.33.0
 sqlparse==0.5.4
 typing_extensions==4.12.2
 uritemplate==4.1.1
-urllib3==2.6.0
+urllib3==2.6.3
